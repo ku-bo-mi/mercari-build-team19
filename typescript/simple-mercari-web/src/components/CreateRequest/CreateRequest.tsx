@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const server = process.env.API_URL || 'http://127.0.0.1:9000';
 
 interface Prop {
-  onListingCompleted?: () => void;
+  onRequestCompleted?: () => void;
 }
 
 type formDataType = {
@@ -12,8 +12,8 @@ type formDataType = {
   image: string | File,
 }
 
-export const Listing: React.FC<Prop> = (props) => {
-  const { onListingCompleted } = props;
+export const CreateRequest: React.FC<Prop> = (props) => {
+  const { onRequestCompleted } = props;
   const initialState = {
     name: "",
     category: "",
@@ -38,14 +38,14 @@ export const Listing: React.FC<Prop> = (props) => {
     data.append('category', values.category)
     data.append('image', values.image)
 
-    fetch(server.concat('/items'), {
+    fetch(server.concat('/items'), { //TODO items -> requests
       method: 'POST',
       mode: 'cors',
       body: data,
     })
       .then(response => {
         console.log('POST status:', response.statusText);
-        onListingCompleted && onListingCompleted();
+        onRequestCompleted && onRequestCompleted();
       })
       .catch((error) => {
         console.error('POST error:', error);
@@ -58,7 +58,7 @@ export const Listing: React.FC<Prop> = (props) => {
           <input type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
           <input type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
           <input type='file' name='image' id='image' onChange={onFileChange} required />
-          <button type='submit'>Add this item</button>
+          <button type='submit'>Request this item</button>
         </div>
       </form>
     </div>

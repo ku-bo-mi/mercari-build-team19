@@ -17,7 +17,12 @@ body{
   color: white;
 }
 
-.Listing {
+.Subtitle {
+  font-size: calc(12px + 1vmin);
+  color: white;
+}
+
+.Form {
   background-color: #222427;
   min-height: 2vh;
   display: flex;
@@ -29,7 +34,7 @@ body{
   padding: 4vh;
 }
 
-.Listing input[type="text"]{
+.Form input[type="text"]{
   margin-right: 10px;
   padding: 10px;
   background-color: #303337;
@@ -38,7 +43,7 @@ body{
   color: #ffffff
 }
 
-.Listing button {
+.Form button {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 20px;
