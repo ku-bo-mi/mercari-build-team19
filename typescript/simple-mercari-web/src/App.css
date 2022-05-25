@@ -2,8 +2,20 @@ body{
   background-color: #222427;
 }
 
+p {
+  display: block;
+  margin-block-start: 0px;
+  margin-block-end: 10px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
 .App {
   text-align: center;
+}
+
+.Container {
+  margin: 4vh;
 }
 
 .Title {
@@ -18,8 +30,16 @@ body{
 }
 
 .Subtitle {
+  margin-bottom: 20px;
   font-size: calc(12px + 1vmin);
+  font-weight: bold;
   color: white;
+}
+
+.RegularText {
+  color: white;
+  font-size: calc(8px + 1vmin);
+  font-weight: regular;
 }
 
 .Form {
@@ -31,26 +51,30 @@ body{
   justify-content: left;
   font-size: calc(10px + 1vmin);
   color: white;
-  padding: 4vh;
 }
 
 .Form input[type="text"]{
   margin-right: 10px;
+  margin-bottom: 20px;
   padding: 10px;
   background-color: #303337;
   border: 1px solid #aaaaaa;
   border-radius: 5px;
   color: #ffffff
 }
+.Form label{
+  margin-bottom: 10px;
+}
 
-.Form button {
+button {
+  margin-top: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: 20px;
+  border-radius: 4px;
   color: #ffffff;
-  background-color: #30b2ff;
+  background-color: #e64f4aff;
   border-style: none;
   font-weight: bold;
 }
@@ -61,7 +85,6 @@ body{
   column-gap: 10px;
   row-gap: 1em;
   background-color: #222427;
-  padding: 4vh;
 }
 
 .ItemList {
@@ -86,10 +109,9 @@ body{
   object-fit: cover;
 }
 
-.ItemList span {
-  padding: 10px;
+.ItemInfo {
+  margin: 10px;
 }
-
 .App-link {
   color: #61dafb;
 }

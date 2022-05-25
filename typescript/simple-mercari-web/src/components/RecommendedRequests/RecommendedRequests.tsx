@@ -55,14 +55,16 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
             {/* TODO: Task 1: Replace the placeholder image with the item image */}
             {/* <img src={placeholderImage} /> */}
             <img className='ItemImage' src={server + (`/image/${request.image}`)} />
-            <p>
-              <span>{request.name}</span>
-              <br />
-              <span>{request.category}</span>
-              <br />
-              <span>123人が探しています</span>
-            </p>
-            <button type='submit'>List this item</button>
+            <div className='ItemInfo'>
+              <p>
+                <span>{request.name}</span>
+                <br />
+                <span>{request.category}</span>
+                <br />
+                <span>123 requests</span>
+              </p>
+              <button type='submit'>List this item</button>
+            </div>
           </div>
         )
       })}

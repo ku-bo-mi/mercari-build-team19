@@ -53,11 +53,34 @@ export const CreateRequest: React.FC<Prop> = (props) => {
   };
   return (
     <div className='Form'>
+      <div className ='Subtitle'>
+        <p>No results found</p>
+      </div>
+      <div className ='RegularText'>
+        <p>Sorry, we could not find anything that matches your search.</p>
+        <br/>
+        <br/>
+      </div>
+      <div className ='Subtitle'>
+        <p>Want to request this item?</p>
+      </div>
       <form onSubmit={onSubmit}>
         <div>
-          <input type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-          <input type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
-          <input type='file' name='image' id='image' onChange={onFileChange} required />
+          <label className ='RegularText'>
+            Name:<br/>
+            <input defaultValue="Auto filled name" type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
+          </label>
+          <br/>
+          <label className ='RegularText'>
+            Category:<br/>
+            <input defaultValue="Auto filled category" type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
+          </label>
+          <br/>
+          <label className ='RegularText'>
+            Upload image:<br/>
+            <input type='file' name='image' id='image' onChange={onFileChange} required />
+          </label>
+          <br/>
           <button type='submit'>Request this item</button>
         </div>
       </form>
