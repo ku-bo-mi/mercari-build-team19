@@ -19,8 +19,8 @@ export const CreateRequest: React.FC<Prop> = (props) => {
 
   const { onRequestCompleted } = props;
   const initialState = {
-    name: "",
-    category: "",
+    name: searchWord,
+    category: searchCategory,
     image: "",
   };
   const [values, setValues] = useState<formDataType>(initialState);

@@ -46,6 +46,11 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
     }
   }, [reload]);
 
+  const listThisItem = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    console.log("Clicked.");
+  };
+
   return (
     <div className='Items'>
       {requests.map((request) => {
