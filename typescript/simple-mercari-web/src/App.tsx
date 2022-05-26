@@ -12,14 +12,44 @@ function App() {
     <div>
       <header className='Title'>
         <p>
-          <b>Mercari test</b>
+          <b>Mercari (demo for a buyer)</b>
         </p>
       </header>
+
       <div className='Container'>
+        <div>
+          <CreateRequest onRequestCompleted={() => setReload(true)} />
+        </div>
+      </div>
+
+      <header className='Title'>
+        <p>
+          <b>Mercari (demo for a seller)</b>
+        </p>
+      </header>
+
+      <div className='Container'>
+        <div className ='Subtitle'>
+          <p>
+            <b>What do you want to sell?</b>
+          </p>
+        </div>
         <div>
           <Listing onListingCompleted={() => setReload(true)} />
         </div>
       </div>
+      
+      <div className='Container'>
+        <div className ='Subtitle'>
+          <p>
+            <b>People are requesting these items</b>
+          </p>
+        </div>
+        <div>
+          <RecommendedRequests reload={reload} onLoadCompleted={() => setReload(false)} />
+        </div>
+      </div>
+      
       <div className='Container'>
         <div className ='Subtitle'>
           <p>
@@ -30,27 +60,6 @@ function App() {
           <ItemList reload={reload} onLoadCompleted={() => setReload(false)} />
         </div>
       </div>
-      <div className='Container'>
-        <div className ='Subtitle'>
-          <p>
-            <b>Create new request</b>
-          </p>
-        </div>
-        <div>
-          <CreateRequest onRequestCompleted={() => setReload(true)} />
-        </div>
-      </div>
-      <div className='Container'>
-        <div className ='Subtitle'>
-          <p>
-            <b>Recommended Requests</b>
-          </p>
-        </div>
-        <div>
-          <RecommendedRequests reload={reload} onLoadCompleted={() => setReload(false)} />
-        </div>
-      </div>
-      
     </div>
   )
 }

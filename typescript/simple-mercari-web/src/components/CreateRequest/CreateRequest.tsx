@@ -13,6 +13,10 @@ type formDataType = {
 }
 
 export const CreateRequest: React.FC<Prop> = (props) => {
+  // default search word
+  const searchWord = 'Fujifilm GFX100S';
+  const searchCategory = 'Camera';
+
   const { onRequestCompleted } = props;
   const initialState = {
     name: "",
@@ -52,38 +56,48 @@ export const CreateRequest: React.FC<Prop> = (props) => {
       })
   };
   return (
-    <div className='Form'>
-      <div className ='Subtitle'>
-        <p>No results found</p>
+    <div>
+      <div className='Form'>
+        <form onSubmit={onSubmit}>
+          <div>
+            <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
+            <button type='submit'>Search</button>
+          </div>
+        </form>
       </div>
-      <div className ='RegularText'>
-        <p>Sorry, we could not find anything that matches your search.</p>
-        <br/>
-        <br/>
+
+      <div>
+        <div className ='Subtitle'>
+          <p>Sorry, no results found.</p>
+        </div>
+        <div className ='RegularText'>
+          <p>We could not find anything that matches your search.</p>
+          <br/>
+          <br/>
+        </div>
       </div>
+
+      <div className='Form'>
       <div className ='Subtitle'>
         <p>Want to request this item?</p>
       </div>
       <form onSubmit={onSubmit}>
         <div>
-          <label className ='RegularText'>
-            Name:<br/>
-            <input defaultValue="Auto filled name" type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-          </label>
-          <br/>
-          <label className ='RegularText'>
-            Category:<br/>
-            <input defaultValue="Auto filled category" type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
-          </label>
-          <br/>
-          <label className ='RegularText'>
-            Upload image:<br/>
-            <input type='file' name='image' id='image' onChange={onFileChange} required />
-          </label>
-          <br/>
+          <label className ='RegularText'>Name</label>
+
+          <input defaultValue={searchWord} type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
+          
+          <label className ='RegularText'>Category</label>
+          <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
+          
+          {/* <label className ='RegularText'>Upload image:</label> */}
+          <input type='file' name='image' id='image' onChange={onFileChange} required />
+          
           <button type='submit'>Request this item</button>
         </div>
       </form>
     </div>
+    </div>
+    
   );
 }
