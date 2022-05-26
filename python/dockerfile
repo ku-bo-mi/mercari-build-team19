@@ -1,12 +1,18 @@
-FROM python:3
+FROM python:3.10.4-slim-buster
 
-COPY ./requirements.txt .
+WORKDIR .
 
-RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
+COPY  /db /db
 
-COPY . . 
+COPY  python/requirements.txt   python/requirements.txt
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000"]
+RUN pip install -r   python/requirements.txt
+
+COPY python/main.py  python/main.py
+
+COPY python/images  python/images
+
+CMD ["uvicorn", "python.main:app", "--host", "0.0.0.0", "--port", "9000"]
 
 # STEP4-4では以下は変更しない
 # CMD ["python", "-V"]

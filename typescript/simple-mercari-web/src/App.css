@@ -95,8 +95,14 @@ button {
   font-weight: bold;
 }
 
+
 button:hover {
   background-color: var(--main-hover-color);
+
+.Listing button:hover{
+  background-color: #fff;
+  color: ##30b2ff;
+
 }
 
 .Items{
