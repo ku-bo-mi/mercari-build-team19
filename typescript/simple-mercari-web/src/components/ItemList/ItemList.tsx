@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { CreateRequest } from '../CreateRequest';
+
 
 interface Item {
   id: number;
@@ -45,23 +47,46 @@ export const ItemList: React.FC<Prop> = (props) => {
     }
   }, [reload]);
 
-  return (
-    <div className='Items'>
-      {items.map((item) => {
-        return (
-          <div key={item.id} className='ItemList'>
-
-            {/* TODO: Task 1: Replace the placeholder image with the item image */}
-            {/* <img src={placeholderImage} /> */}
-            <img className='ItemImage' src={server + (`/image/${item.image}`)} />
-            <p>
-              <span>{item.name}</span>
-              <br />
-              <span>{item.category}</span>
-            </p>
-          </div>
-        )
-      })}
-    </div>
-  )
+  if (true){
+    return (
+      <div className='Items'>
+        {items.map((item) => {
+          return (
+            <div key={item.id} className='ItemList'>
+  
+              {/* TODO: Task 1: Replace the placeholder image with the item image */}
+              {/* <img src={placeholderImage} /> */}
+              <img className='ItemImage' src={server + (`/image/${item.image}`)} />
+              <div className='ItemInfo'>
+                <p>
+                  <span>{item.name}</span>
+                  <br />
+                  <span>{item.category}</span>
+                </p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  } else{
+    // const [reload, setReload] = useState(true);
+    // return (
+    //   <div>
+    //     <div>
+    //       <p>No results found</p>
+    //       <p>We could not find anything that matches your search.</p>
+    //     </div>
+    //     <div className ='Subtitle'>
+    //       <p>
+    //         <b>Create new request</b>
+    //       </p>
+    //     </div>
+    //     <div>
+    //       <CreateRequest onRequestCompleted={() => setReload(true)} />
+    //     </div>
+    //   </div>
+    // )
+  }
+  
 };
