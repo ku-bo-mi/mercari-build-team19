@@ -20,7 +20,7 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [requests, setRequests] = useState<Request[]>([])
   const fetchRequests = () => {
-    fetch(server.concat('/items'),
+    fetch(server.concat('/requests'),
       {
         method: 'GET',
         mode: 'cors',
@@ -59,7 +59,7 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
 
             {/* TODO: Task 1: Replace the placeholder image with the item image */}
             {/* <img src={placeholderImage} /> */}
-            <img className='ItemImage' src={server + (`/image/${request.image}`)} />
+            {/* <img className='ItemImage' src={server + (`/image/${request.image}`)} /> */}
             <div className='ItemInfo'>
               <p>
                 <span>{request.name}</span>

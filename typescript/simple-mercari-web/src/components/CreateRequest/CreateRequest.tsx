@@ -42,7 +42,7 @@ export const CreateRequest: React.FC<Prop> = (props) => {
     data.append('category', values.category)
     data.append('image', values.image)
 
-    fetch(server.concat('/items'), { //TODO items -> requests
+    fetch(server.concat('/requests'), { //TODO items -> requests
       method: 'POST',
       mode: 'cors',
       body: data,
@@ -91,7 +91,7 @@ export const CreateRequest: React.FC<Prop> = (props) => {
           <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
           
           {/* <label className ='RegularText'>Upload image:</label> */}
-          <input type='file' name='image' id='image' onChange={onFileChange} required />
+          {/* <input type='file' name='image' id='image' onChange={onFileChange} required /> */}
           
           <button type='submit'>Request this item</button>
         </div>
