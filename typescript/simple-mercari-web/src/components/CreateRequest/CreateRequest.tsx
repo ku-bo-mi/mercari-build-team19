@@ -14,7 +14,7 @@ type formDataType = {
 
 export const CreateRequest: React.FC<Prop> = (props) => {
   // default search word
-  const searchWord = 'Fujifilm GFX100S';
+  const searchWord = 'CANON TL-1';
   const searchCategory = 'Camera';
 
   const { onRequestCompleted } = props;
@@ -91,7 +91,7 @@ export const CreateRequest: React.FC<Prop> = (props) => {
           <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
           
           {/* <label className ='RegularText'>Upload image:</label> */}
-          {/* <input type='file' name='image' id='image' onChange={onFileChange} required /> */}
+          <input type='file' name='image' id='image' onChange={onFileChange} required />
           
           <button type='submit'>Request this item</button>
         </div>
