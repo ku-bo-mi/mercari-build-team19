@@ -1,6 +1,7 @@
 import os
 import logging
 import pathlib
+import sqlite3
 from fastapi import FastAPI, Form, File, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +21,12 @@ app.add_middleware(
     allow_methods=["GET","POST","PUT","DELETE"],
     allow_headers=["*"],
 )
+
+"""
+Creates tables
+"""
+database.create_tables()
+
 
 """
 Gets the list of all items
@@ -133,3 +140,42 @@ def save_image(image_bytes):
         fout.write(image_bytes)
 
     return filename_hash
+
+"""
+Gets the list of all requests
+"""
+@app.get("/requests")
+def read_requests():
+    # get the list of all items in the database
+    requests = database.get_requests()
+    # format the list and return
+    return format_items(requests)
+
+"""
+Creates a new requests with the given name, cateogry, image
+Accepts the arguments as File.
+"""
+@app.post("/requests")
+def add_item(name: bytes = File(...), category: bytes = File(...), image: bytes = File(default=None)):
+
+    # cast bytes to string
+    name = name.decode('utf-8')
+    category = category.decode('utf-8')
+
+    logger.info(f"Receive request: name = {name}, category = {category}")
+
+    # if image is uploaded
+    if image:
+        # save the bytes of the uploaded image file in "images" directory
+        filename_hash = save_image(image)
+        logger.info(f"Created file: {filename_hash}")
+
+    # if no image is uploaded
+    else:
+        filename_hash = ""
+
+    # add a new item in the database with the hashed filename
+    database.add_request(name, category, filename_hash)
+    
+    # # return message
+    return {"message": f"item received: {name}"}
