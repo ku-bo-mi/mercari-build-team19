@@ -84,34 +84,24 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
       </div>
 
       <div className='Items'>
-        <div className='ItemList'>
-          {/* TODO: Task 1: Replace the placeholder image with the item image */}
-          {/* <img src={placeholderImage} /> */}
+        <form onSubmit={onSubmit} className='ItemList'>
           <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
+          
           <div className='ItemInfo'>
-            <p>{searchWord}</p>
-            <p>{searchCategory}</p>
+            <label className ='RegularText'>Name</label>
+
+            <input defaultValue={searchWord} type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
+            
+            <label className ='RegularText'>Category</label>
+            <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
             <p>123 requests</p>
+            {/* <label className ='RegularText'>Upload image:</label> */}
+            {/* <input type='file' name='image' id='image' onChange={onFileChange} required /> */}
+            
             <button type='submit'>Request this item</button>
           </div>
-        </div>
+        </form>
       </div>
-
-      <form onSubmit={onSubmit}>
-        <div>
-          <label className ='RegularText'>Name</label>
-
-          <input defaultValue={searchWord} type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-          
-          <label className ='RegularText'>Category</label>
-          <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
-          
-          {/* <label className ='RegularText'>Upload image:</label> */}
-          <input type='file' name='image' id='image' onChange={onFileChange} required />
-          
-          <button type='submit'>Request this item</button>
-        </div>
-      </form>
       
     </div>
     </div>
