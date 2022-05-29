@@ -6,6 +6,20 @@ import hashlib
 filename = '../db/mercari.sqlite3'
 
 """
+Creates database
+"""
+def create_tables():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = 'CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, category STRING, image STRING)'
+        db_cursor.execute(sql)
+        sql = 'CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, category STRING, image STRING)'
+        db_cursor.execute(sql)
+        requests = db_cursor.fetchall()
+        db_connect.commit()
+    return requests
+
+"""
 Returns the list of all items in the database
 """
 def get_items():
@@ -69,3 +83,31 @@ def search_items(keyword):
         db_connect.commit()
 
     return items
+
+"""
+Returns the list of all items in the database
+"""
+def get_requests():
+    requests = []
+
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        # insert new data
+        sql = 'SELECT * FROM requests'
+        db_cursor.execute(sql)
+        requests = db_cursor.fetchall()
+        db_connect.commit()
+
+    return requests
+
+"""
+Add a new request with the given name, category and image to the database
+"""
+def add_request(name, category, image_hash):
+
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = 'INSERT INTO requests(name, category, image) values (?, ?, ?)'
+        data = [name, category, image_hash]
+        db_cursor.execute(sql, data)
+        db_connect.commit()
