@@ -127,7 +127,7 @@ def add_item(name, category, image_hash, status_id=None):
         db_cursor.execute("SELECT category_id FROM categories WHERE name=(?)", (category.capitalize(),))
         category_id = db_cursor.fetchone()[0]
         sql = 'INSERT INTO items(name, category_id, image,numOfViews,status_id) VALUES (?, ?, ?, ?, ?)'
-        data = (name, category_id, image_hash, 0, status_id)
+        data = (name, category_id, image_hash, 10git, status_id)
         db_cursor.execute(sql, data)
         if status_id == 1:
             db_cursor.execute("INSERT OR IGNORE INTO status (name) VALUES (?)", ('on_List',))
