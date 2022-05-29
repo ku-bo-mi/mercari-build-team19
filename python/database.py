@@ -1,71 +1,175 @@
-from contextlib import closing, nullcontext
+from contextlib import closing
+
 import sqlite3
-import hashlib
 
 # file path of the database
+
 filename = '../db/mercari.sqlite3'
+
+"""
+Creates database
+"""
+
+
+def drop_tables():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql1 = "DROP TABLE category"
+        db_cursor.execute(sql1)
+        db_connect.commit()
+
+
+
+def  delete_data(table):
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = "DELETE * FROM (?)"
+        db_cursor.execute(sql, (table,))
+        db_connect.commit()
+
+
+def create_tables():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = """CREATE TABLE IF NOT EXISTS items (
+        id INTEGER PRIMARY KEY, 
+        name STRING, 
+        category_id INTEGER,
+        image STRING,
+        status_id INTEGER,
+        numOfViews INTEGER,
+        FOREIGN KEY(category_id) REFERENCES categories(category_id),
+        FOREIGN KEY (status_id) REFERENCES status(status_id)
+        )"""
+        db_cursor.execute(sql)
+        sql = """CREATE TABLE IF NOT EXISTS categories (
+                category_id INTEGER PRIMARY KEY ,
+                name STRING UNIQUE
+                )"""
+        db_cursor.execute(sql)
+        sql = """CREATE TABLE IF NOT EXISTS status (
+                status_id  INTEGER PRIMARY KEY,
+                name STRING UNIQUE
+        )"""
+        db_cursor.execute(sql)
+        requests = db_cursor.fetchall()
+        db_connect.commit()
+    return requests
+
 
 """
 Returns the list of all items in the database
 """
-def get_items():
-    items = []
 
+
+def get_items(status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        # insert new data
-        sql = 'SELECT * FROM items'
-        db_cursor.execute(sql)
+        db_connect.row_factory = sqlite3.Row
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image,
+                items.numOfViews,
+                status.name as status
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE status.status_id =(?)
+                """
+        db_cursor.execute(sql, (status_id,))
         items = db_cursor.fetchall()
-        db_connect.commit()
+        r = [dict((db_cursor.description[i][0], value)
+                  for i, value in enumerate(row)) for row in items]
 
-    return items
+        db_connect.commit()
+        return {'items': r} if r else {'message': 'No data found m(_ _)m'}
+
 
 """
 Search item with the given id
 Return the item if present, return None otherwise
 """
-def get_id_by_id(item_id):
-    item = []
 
+
+def get_item_by_id(item_id, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        # insert new data
-        sql = 'SELECT * FROM items WHERE id = ?'
-        data = (item_id,)
+        db_connect.row_factory = sqlite3.Row
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image,
+                items.numOfViews,
+                status.name as status
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE items.id=(?) AND status.status_id =(?)"""
+        data = (item_id, status_id)
         db_cursor.execute(sql, data)
-        item = db_cursor.fetchone()
+        item = db_cursor.fetchall()
+        r = [dict((db_cursor.description[i][0], value)
+                  for i, value in enumerate(row)) for row in item]
         db_connect.commit()
-
-    return item
-
+        return {'items': r} if r else {'message': 'Item not found m(_ _)m'}
 
 
 """
 Add a new item with the given name, category and image to the database
 """
-def add_item(name, category, image_hash):
 
+
+def add_item(name, category, image_hash, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        sql = 'INSERT INTO items(name, category, image) values (?, ?, ?)'
-        data = [name, category, image_hash]
+        db_cursor.execute("INSERT OR IGNORE INTO categories (name) VALUES (?)", (category.capitalize(),))
+        db_cursor.execute("SELECT category_id FROM categories WHERE name=(?)", (category.capitalize(),))
+        category_id = db_cursor.fetchone()[0]
+        sql = 'INSERT INTO items(name, category_id, image,numOfViews,status_id) VALUES (?, ?, ?, ?, ?)'
+        data = (name, category_id, image_hash, 10git, status_id)
         db_cursor.execute(sql, data)
+        if status_id == 1:
+            db_cursor.execute("INSERT OR IGNORE INTO status (name) VALUES (?)", ('on_List',))
+        if status_id == 2:
+            db_cursor.execute("INSERT OR IGNORE INTO status (name) VALUES (?)", ('on_Request',))
         db_connect.commit()
+
 
 """
 Search items with the given string keyword from the database.
 Returns the list of items where its name contains the keyword.
 """
-def search_items(keyword):
-    items = []
 
+
+def search_items(keyword, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        sql = 'SELECT * FROM items WHERE name LIKE ?'
-        data = ('%' + keyword + '%',)
+        db_connect.row_factory = sqlite3.Row
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image,
+                items.numOfViews,
+                status.name as status
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE items.name LIKE (?) AND status.status_id =(?)"""
+        data = (('%' + keyword + '%'), status_id)
         db_cursor.execute(sql, data)
         items = db_cursor.fetchall()
+        print(items)
+        r = [dict((db_cursor.description[i][0], value)
+                  for i, value in enumerate(row)) for row in items]
         db_connect.commit()
 
-    return items
+        return {'items': r} if r else {'message': 'Item not found m(_ _)m'}
+
+
+def add_views():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = """UPDATE items SET numOfViews = numOfViews+1"""
+        db_cursor.execute(sql)
+        db_connect.commit()
