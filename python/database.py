@@ -11,20 +11,46 @@ Creates database
 """
 
 
+def drop_tables():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql1 = "DROP TABLE category"
+        db_cursor.execute(sql1)
+
+        db_connect.commit()
+
+
+
+def  delete_data(table):
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = "DELETE * FROM (?)"
+        db_cursor.execute(sql, (table,))
+        db_connect.commit()
+
+
 def create_tables():
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        sql = """CREATE TABLE IF NOT EXISTS requests (
-        id INTEGER PRIMARY KEY AUTOINCREMENT, 
-        name STRING, 
-        category STRING,
-         image STRING)"""
-        db_cursor.execute(sql)
         sql = """CREATE TABLE IF NOT EXISTS items (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name STRING, 
-                category STRING, 
-                image STRING)"""
+        id INTEGER PRIMARY KEY, 
+        name STRING, 
+        category_id INTEGER,
+        image STRING,
+        status_id INTEGER,
+        FOREIGN KEY(category_id) REFERENCES categories(category_id),
+        FOREIGN KEY (status_id) REFERENCES status(status_id)
+        )"""
+        db_cursor.execute(sql)
+        sql = """CREATE TABLE IF NOT EXISTS categories (
+                category_id INTEGER PRIMARY KEY ,
+                name STRING UNIQUE
+                )"""
+        db_cursor.execute(sql)
+        sql = """CREATE TABLE IF NOT EXISTS status (
+                status_id  INTEGER PRIMARY KEY,
+                name STRING UNIQUE
+        )"""
         db_cursor.execute(sql)
         requests = db_cursor.fetchall()
         db_connect.commit()
@@ -36,12 +62,21 @@ Returns the list of all items in the database
 """
 
 
-def get_items():
+def get_items(status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
         db_connect.row_factory = sqlite3.Row
-        sql = 'SELECT * FROM items'
-        db_cursor.execute(sql)
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image,
+                status.name as status
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE status.status_id =(?)
+                """
+        db_cursor.execute(sql, (status_id,))
         items = db_cursor.fetchall()
         r = [dict((db_cursor.description[i][0], value)
                   for i, value in enumerate(row)) for row in items]
@@ -56,12 +91,19 @@ Return the item if present, return None otherwise
 """
 
 
-def get_id_by_id(item_id):
+def get_item_by_id(item_id, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
         db_connect.row_factory = sqlite3.Row
-        sql = 'SELECT * FROM items WHERE id = ?'
-        data = (item_id,)
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE items.id=(?) AND status.status_id =(?)"""
+        data = (item_id, status_id)
         db_cursor.execute(sql, data)
         item = db_cursor.fetchall()
         r = [dict((db_cursor.description[i][0], value)
@@ -75,12 +117,19 @@ Add a new item with the given name, category and image to the database
 """
 
 
-def add_item(name, category, image_hash):
+def add_item(name, category, image_hash, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        sql = 'INSERT INTO items(name, category, image) values (?, ?, ?)'
-        data = [name, category, image_hash]
+        db_cursor.execute("INSERT OR IGNORE INTO categories (name) VALUES (?)", (category.capitalize(),))
+        db_cursor.execute("SELECT category_id FROM categories WHERE name=(?)", (category.capitalize(),))
+        category_id = db_cursor.fetchone()[0]
+        sql = 'INSERT INTO items(name, category_id, image, status_id) VALUES (?, ?, ?, ?)'
+        data = (name, category_id, image_hash, status_id)
         db_cursor.execute(sql, data)
+        if status_id == 1:
+            db_cursor.execute("INSERT OR IGNORE INTO status (name) VALUES (?)", ('on_List',))
+        if status_id == 2:
+            db_cursor.execute("INSERT OR IGNORE INTO status (name) VALUES (?)", ('on_Request',))
         db_connect.commit()
 
 
@@ -90,49 +139,25 @@ Returns the list of items where its name contains the keyword.
 """
 
 
-def search_items(keyword):
+def search_items(keyword, status_id=None):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
         db_connect.row_factory = sqlite3.Row
-        sql = 'SELECT * FROM items WHERE name LIKE ?'
-        data = ('%' + keyword + '%',)
+        sql = """SELECT items.id,
+                items.name,
+                categories.name as category,
+                items.image,
+                status.name as status
+                FROM items 
+                INNER JOIN categories ON items.category_id =categories.category_id
+                INNER JOIN status ON items.status_id = status.status_id
+                WHERE items.name LIKE (?) AND status.status_id =(?)"""
+        data = (('%' + keyword + '%'), status_id)
         db_cursor.execute(sql, data)
         items = db_cursor.fetchall()
+        print(items)
         r = [dict((db_cursor.description[i][0], value)
                   for i, value in enumerate(row)) for row in items]
         db_connect.commit()
 
         return {'items': r} if r else {'message': 'Item not found m(_ _)m'}
-
-
-"""
-Returns the list of all items in the database
-"""
-
-
-def get_requests():
-    with closing(sqlite3.connect(filename)) as db_connect:
-        db_cursor = db_connect.cursor()
-        db_connect.row_factory = sqlite3.Row
-        sql = 'SELECT * FROM requests'
-        db_cursor.execute(sql)
-        requests = db_cursor.fetchall()
-        r = [dict((db_cursor.description[i][0], value)
-                  for i, value in enumerate(row)) for row in requests]
-        db_connect.commit()
-
-        return {'items': r} if r else {'message': 'Request not found m(_ _)m'}
-
-
-"""
-Add a new request with the given name, category and image to the database
-"""
-
-
-def add_request(name, category, image_hash):
-    with closing(sqlite3.connect(filename)) as db_connect:
-        db_cursor = db_connect.cursor()
-        sql = 'INSERT INTO requests(name, category, image) values (?, ?, ?)'
-        data = [name, category, image_hash]
-        db_cursor.execute(sql, data)
-        db_connect.commit()
