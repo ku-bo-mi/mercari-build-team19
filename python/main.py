@@ -23,10 +23,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-"""
-Creates tables
-"""
+
+# Creates and initialize tables
 database.create_tables()
+database.add_data_to_tables()
 
 """
 Main page
