@@ -12,10 +12,11 @@ type formDataType = {
   image: string | File,
 }
 
-export const CreateRequest: React.FC<Prop> = (props) => {
-  // default search word
+export const CreateRequestCard: React.FC<Prop> = (props) => {
+  // default input
   const searchWord = 'CANON TL-1';
   const searchCategory = 'Camera';
+  const defaultImage = '003271552639672da51603adf5a60e8e784b3491bda0eb02fcf6b55c941dd023.jpg'
 
   const { onRequestCompleted } = props;
   const initialState = {
@@ -81,6 +82,21 @@ export const CreateRequest: React.FC<Prop> = (props) => {
       <div className ='Subtitle'>
         <p>Want to request this item?</p>
       </div>
+
+      <div className='Items'>
+        <div className='ItemList'>
+          {/* TODO: Task 1: Replace the placeholder image with the item image */}
+          {/* <img src={placeholderImage} /> */}
+          <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
+          <div className='ItemInfo'>
+            <p>{searchWord}</p>
+            <p>{searchCategory}</p>
+            <p>123 requests</p>
+            <button type='submit'>Request this item</button>
+          </div>
+        </div>
+      </div>
+
       <form onSubmit={onSubmit}>
         <div>
           <label className ='RegularText'>Name</label>
@@ -96,6 +112,7 @@ export const CreateRequest: React.FC<Prop> = (props) => {
           <button type='submit'>Request this item</button>
         </div>
       </form>
+      
     </div>
     </div>
     

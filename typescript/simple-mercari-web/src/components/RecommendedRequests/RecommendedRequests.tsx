@@ -20,7 +20,7 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
   const { reload = true, onLoadCompleted } = props;
   const [requests, setRequests] = useState<Request[]>([])
   const fetchRequests = () => {
-    fetch(server.concat('/items'),
+    fetch(server.concat('/requests'),
       {
         method: 'GET',
         mode: 'cors',

@@ -110,7 +110,7 @@ button:hover {
 
 .ItemList {
   background-color: var(--object-background-color);
-  min-height: 8vh;
+  /* min-height: 8vh; */
   display: flex;
   flex-direction: column;
   align-items: flex-start;

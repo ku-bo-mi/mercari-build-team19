@@ -3,6 +3,7 @@ import './App.css';
 import { ItemList } from './components/ItemList';
 import { Listing } from './components/Listing';
 import { CreateRequest } from './components/CreateRequest';
+import { CreateRequestCard } from './components/CreateRequestCard';
 import { RecommendedRequests } from './components/RecommendedRequests';
 
 function App() {
@@ -16,9 +17,15 @@ function App() {
         </p>
       </header>
 
-      <div className='Container'>
+      {/* <div className='Container'>
         <div>
           <CreateRequest onRequestCompleted={() => setReload(true)} />
+        </div>
+      </div> */}
+
+      <div className='Container'>
+        <div>
+          <CreateRequestCard onRequestCompleted={() => setReload(true)} />
         </div>
       </div>
 
@@ -31,7 +38,7 @@ function App() {
       <div className='Container'>
         <div className ='Subtitle'>
           <p>
-            <b>What do you want to sell?</b>
+            <b>What do you want to sell? / 何を売りたいですか？</b>
           </p>
         </div>
         <div>
@@ -53,7 +60,7 @@ function App() {
       <div className='Container'>
         <div className ='Subtitle'>
           <p>
-            <b>Your items</b>
+            <b>Your items / あなたが出品した商品</b>
           </p>
         </div>
         <div>
