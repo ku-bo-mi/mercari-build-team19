@@ -112,15 +112,22 @@ async def search_items(keyword: str):
 
 @app.get("/image/{image_filename}")
 async def get_image(image_filename):
+
+    if not image_filename:
+        logger.debug(f"Image not found: {image}")
+
     # Create image path
     image = images / image_filename
 
-    if not image_filename.endswith(".jpg"):
-        raise HTTPException(status_code=400, detail="Image path does not end with .jpg")
-
+    
     if not image.exists():
         logger.debug(f"Image not found: {image}")
-        image = images / "default.jpg"
+        # image = images / "default.jpg"
+        default_image_filename = "default.jpg"
+        image = images / default_image_filename
+
+    if not image_filename.endswith(".jpg"):
+        raise HTTPException(status_code=400, detail="Image path does not end with .jpg")
 
     return FileResponse(image)
 
@@ -154,7 +161,6 @@ def read_requests():
     # get the list of all items in the database
     try:
         requests = database.get_requests()
-    # format the list and return
         return requests
     except Error as e:
         logger.error(e)
@@ -168,10 +174,11 @@ Accepts the arguments as File.
 
 
 @app.post("/requests")
-def add_item(name: bytes = File(...), category: bytes = File(...), image: bytes = File(default=None)):
+def add_item(name: bytes = File(...), category: bytes = File(...), image: bytes = File(default=None), numOfRequests: bytes = File(...)):
     # cast bytes to string
     name = name.decode('utf-8')
     category = category.decode('utf-8')
+    numOfRequests = numOfRequests.decode('utf-8')
 
     logger.info(f"Receive request: name = {name}, category = {category}")
 
@@ -183,11 +190,13 @@ def add_item(name: bytes = File(...), category: bytes = File(...), image: bytes 
 
     # if no image is uploaded
     else:
-        filename_hash = ""
+        # default image
+        default_image_filename = "003271552639672da51603adf5a60e8e784b3491bda0eb02fcf6b55c941dd023.jpg"
+        filename_hash = default_image_filename
 
     # add a new item in the database with the hashed filename
     try:
-        database.add_request(name, category, filename_hash)
+        database.add_request(name, category, filename_hash, numOfRequests)
         return {"message": f"item received: {name}"}
     except Error as e:
         logger.error(e)

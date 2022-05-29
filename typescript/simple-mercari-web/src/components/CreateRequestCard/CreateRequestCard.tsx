@@ -12,19 +12,21 @@ type formDataType = {
   name: string,
   category: string,
   image: string | File,
+  numOfRequests: string,
 }
 
 export const CreateRequestCard: React.FC<Prop> = (props) => {
   // default input
-  const searchWord = 'CANON TL-1';
-  const searchCategory = 'Camera';
+  const defaultName = 'CANON TL-1';
+  const defaultCategory = 'Camera';
   const defaultImage = '003271552639672da51603adf5a60e8e784b3491bda0eb02fcf6b55c941dd023.jpg'
-
+  const defaultNumOfRequests = "142"
   const { onRequestCompleted } = props;
   const initialState = {
-    name: searchWord,
-    category: searchCategory,
+    name: defaultName,
+    category: defaultCategory,
     image: "",
+    numOfRequests: ""
     
   };
   const [values, setValues] = useState<formDataType>(initialState);
@@ -45,14 +47,16 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
     // data.append('name', values.name)
     // data.append('category', values.category)
     // data.append('image', values.image)
-    data.append('name', searchWord)
-    data.append('category', searchCategory)
-    data.append('image', values.image)
+    data.append('name', defaultName)
+    data.append('category', defaultCategory)
+    data.append('image', "")
+    data.append('numOfRequests', defaultNumOfRequests)
     
     submitted = true
     console.info("submitted: " + submitted)
+    console.info("data" + {data})
 
-    fetch(server.concat('/requests'), { //TODO items -> requests
+    fetch(server.concat('/requests'), {
       method: 'POST',
       mode: 'cors',
       body: data,
@@ -72,7 +76,7 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
         <div className='Form'>
           <form onSubmit={onSubmit}>
             <div>
-              <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
+              <input defaultValue={defaultName} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
               <button type='submit'>Search</button>
             </div>
           </form>
@@ -99,9 +103,8 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
             <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
             
             <div className='ItemInfo'>
-              <p className='ItemName'>{searchWord}</p>
-              <p className='ItemCategory'>{searchCategory}</p>
-              <p className='ItemRequesters'>123 requests</p>
+              <p className='ItemName'>{defaultName}</p>
+              <p className='ItemCategory'>{defaultCategory}</p>
               <p>Request Created!</p>
             </div>
           </form>
@@ -118,7 +121,7 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
         <div className='Form'>
           <form onSubmit={onSubmit}>
             <div>
-              <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
+              <input defaultValue={defaultName} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
               <button type='submit'>Search</button>
             </div>
           </form>
@@ -145,9 +148,8 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
             <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
             
             <div className='ItemInfo'>
-              <p className='ItemName'>{searchWord}</p>
-              <p className='ItemCategory'>{searchCategory}</p>
-              <p className='ItemRequesters'>123 requests</p>
+              <p className='ItemName'>{defaultName}</p>
+              <p className='ItemCategory'>{defaultCategory}</p>
               <button type='submit'>Request this item</button>
             </div>
           </form>

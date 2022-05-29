@@ -16,9 +16,9 @@ default_items.append(["FUJIFILM 35mm Film", "Camera", "17da6602b67ddc1b9c8c377d7
 
 # initial data for requests
 default_requests = []
-default_requests.append(["FUJIFILM X-T100", "Camera", "b99c569d867bbb8cb316d4a46f0dcc713c5b69b2f7845324a26775a071139392.jpg"])
-default_requests.append(["KODAK 35mm Film", "Camera", "22a908e8f9b7548c44c98fca526e382f9d8000828c76b4a494f4c8fef5bd0f76.jpg"])
-default_requests.append(["CANON TL-1", "Camera", "003271552639672da51603adf5a60e8e784b3491bda0eb02fcf6b55c941dd023.jpg"])
+default_requests.append(["FUJIFILM X-T100", "Camera", "b99c569d867bbb8cb316d4a46f0dcc713c5b69b2f7845324a26775a071139392.jpg", "126"])
+default_requests.append(["KODAK 35mm Film", "Camera", "22a908e8f9b7548c44c98fca526e382f9d8000828c76b4a494f4c8fef5bd0f76.jpg", "481"])
+default_requests.append(["CANON TL-1", "Camera", "003271552639672da51603adf5a60e8e784b3491bda0eb02fcf6b55c941dd023.jpg", "72"])
 
 """
 Creates database
@@ -41,7 +41,9 @@ def create_tables():
                 id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 name STRING, 
                 category STRING,
-                image STRING)"""
+                image STRING,
+                numOfRequests STRING
+                )"""
         db_cursor.execute(sql)
 
         sql = """CREATE TABLE IF NOT EXISTS items (
@@ -68,7 +70,7 @@ def add_data_to_tables():
             db_cursor.execute(sql, data)
 
         for request in default_requests:
-            sql = 'INSERT INTO requests(name, category, image) values (?, ?, ?)'
+            sql = 'INSERT INTO requests(name, category, image, numOfRequests) values (?, ?, ?, ?)'
             data = request
             db_cursor.execute(sql, data)
 
@@ -165,6 +167,10 @@ def get_requests():
                   for i, value in enumerate(row)) for row in requests]
         db_connect.commit()
 
+        # for i in range(len(r)):
+        #     r[i]["requests"] = "100"
+            
+
         return {'items': r} if r else {'message': 'Request not found m(_ _)m'}
 
 
@@ -173,10 +179,10 @@ Add a new request with the given name, category and image to the database
 """
 
 
-def add_request(name, category, image_hash):
+def add_request(name, category, image_hash, numOfRequests):
     with closing(sqlite3.connect(filename)) as db_connect:
         db_cursor = db_connect.cursor()
-        sql = 'INSERT INTO requests(name, category, image) values (?, ?, ?)'
-        data = [name, category, image_hash]
+        sql = 'INSERT INTO requests(name, category, image, numOfRequests) values (?, ?, ?, ?)'
+        data = [name, category, image_hash, numOfRequests]
         db_cursor.execute(sql, data)
         db_connect.commit()

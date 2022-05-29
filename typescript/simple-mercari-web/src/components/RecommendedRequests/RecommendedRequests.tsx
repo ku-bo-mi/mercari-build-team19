@@ -5,7 +5,7 @@ interface Request {
   name: string;
   category: string;
   image: string;
-  numOfRequesters: number;
+  numOfRequests: string;
 };
 
 const server = process.env.API_URL || 'http://127.0.0.1:9000';
@@ -63,7 +63,7 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
             <div className='ItemInfo'>
                 <p className='ItemName'>{request.name}</p>
                 <p className='ItemCategory'>{request.category}</p>
-                <p className='ItemRequesters'>123 requests</p>
+                <p className='ItemRequesters'>{request.numOfRequests} requests</p>
               <button type='submit'>List this item</button>
             </div>
           </div>
