@@ -61,13 +61,9 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
             {/* <img src={placeholderImage} /> */}
             <img className='ItemImage' src={server + (`/image/${request.image}`)} />
             <div className='ItemInfo'>
-              <p>
-                <span>{request.name}</span>
-                <br />
-                <span>{request.category}</span>
-                <br />
-                <span>123 requests</span>
-              </p>
+                <p className='ItemName'>{request.name}</p>
+                <p className='ItemCategory'>{request.category}</p>
+                <p className='ItemRequesters'>123 requests</p>
               <button type='submit'>List this item</button>
             </div>
           </div>

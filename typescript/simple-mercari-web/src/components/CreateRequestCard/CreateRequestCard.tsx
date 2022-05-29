@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 const server = process.env.API_URL || 'http://127.0.0.1:9000';
 
+let submitted = false;
+
 interface Prop {
   onRequestCompleted?: () => void;
 }
@@ -23,6 +25,7 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
     name: searchWord,
     category: searchCategory,
     image: "",
+    
   };
   const [values, setValues] = useState<formDataType>(initialState);
 
@@ -39,9 +42,15 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData()
-    data.append('name', values.name)
-    data.append('category', values.category)
+    // data.append('name', values.name)
+    // data.append('category', values.category)
+    // data.append('image', values.image)
+    data.append('name', searchWord)
+    data.append('category', searchCategory)
     data.append('image', values.image)
+    
+    submitted = true
+    console.info("submitted: " + submitted)
 
     fetch(server.concat('/requests'), { //TODO items -> requests
       method: 'POST',
@@ -56,55 +65,99 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
         console.error('POST error:', error);
       })
   };
-  return (
-    <div>
-      <div className='Form'>
-        <form onSubmit={onSubmit}>
-          <div>
-            <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
-            <button type='submit'>Search</button>
-          </div>
-        </form>
-      </div>
 
+  if(submitted){
+    return (
       <div>
-        <div className ='Subtitle'>
-          <p>Sorry, no results found.</p>
+        <div className='Form'>
+          <form onSubmit={onSubmit}>
+            <div>
+              <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
+              <button type='submit'>Search</button>
+            </div>
+          </form>
         </div>
-        <div className ='RegularText'>
-          <p>We could not find anything that matches your search.</p>
-          <br/>
-          <br/>
-        </div>
-      </div>
-
-      <div className='Form'>
-      <div className ='Subtitle'>
-        <p>Want to request this item?</p>
-      </div>
-
-      <div className='Items'>
-        <form onSubmit={onSubmit} className='ItemList'>
-          <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
-          
-          <div className='ItemInfo'>
-            <label className ='RegularText'>Name</label>
-
-            <input defaultValue={searchWord} type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-            
-            <label className ='RegularText'>Category</label>
-            <input defaultValue={searchCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
-            <p>123 requests</p>
-            {/* <label className ='RegularText'>Upload image:</label> */}
-            {/* <input type='file' name='image' id='image' onChange={onFileChange} required /> */}
-            
-            <button type='submit'>Request this item</button>
+  
+        <div>
+          <div className ='Subtitle'>
+            <p>Sorry, no results found.</p>
           </div>
-        </form>
+          <div className ='RegularText'>
+            <p>We could not find anything that matches your search.</p>
+            <br/>
+            <br/>
+          </div>
+        </div>
+  
+        <div className='Form'>
+        <div className ='Subtitle'>
+          <p>Want to request this item?</p>
+        </div>
+  
+        <div className='Items'>
+          <form onSubmit={onSubmit} className='ItemList'>
+            <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
+            
+            <div className='ItemInfo'>
+              <p className='ItemName'>{searchWord}</p>
+              <p className='ItemCategory'>{searchCategory}</p>
+              <p className='ItemRequesters'>123 requests</p>
+              <p>Request Created!</p>
+            </div>
+          </form>
+        </div>
+        
+      </div>
       </div>
       
-    </div>
-    </div>
-    
-  );
+    );
+  }
+  else{
+    return (
+      <div>
+        <div className='Form'>
+          <form onSubmit={onSubmit}>
+            <div>
+              <input defaultValue={searchWord} type='text' name='keyword' placeholder='search' onChange={onValueChange} required />
+              <button type='submit'>Search</button>
+            </div>
+          </form>
+        </div>
+  
+        <div>
+          <div className ='Subtitle'>
+            <p>Sorry, no results found.</p>
+          </div>
+          <div className ='RegularText'>
+            <p>We could not find anything that matches your search.</p>
+            <br/>
+            <br/>
+          </div>
+        </div>
+  
+        <div className='Form'>
+        <div className ='Subtitle'>
+          <p>Want to request this item?</p>
+        </div>
+  
+        <div className='Items'>
+          <form onSubmit={onSubmit} className='ItemList'>
+            <img className='ItemImage' src={server + (`/image/${defaultImage}`)} />
+            
+            <div className='ItemInfo'>
+              <p className='ItemName'>{searchWord}</p>
+              <p className='ItemCategory'>{searchCategory}</p>
+              <p className='ItemRequesters'>123 requests</p>
+              <button type='submit'>Request this item</button>
+            </div>
+          </form>
+        </div>
+        
+      </div>
+      </div>
+      
+    );
+  }
+  
+  
 }

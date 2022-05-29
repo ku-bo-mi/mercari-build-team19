@@ -6,6 +6,7 @@
   --text-main-color: #404048;
   --text-sub-color: #777777;
   --text-white: #ffffff;
+  --border-color: #aaaaaa;
 }
 
 
@@ -74,7 +75,7 @@ p {
   display: inline-block;
   box-sizing: border-box;
   width: 160px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   color: var(--text-main-color)
 }
@@ -119,6 +120,8 @@ button:hover {
   color: var(--text-main-color);
   border-radius: 5px;
   border-width: 1px;
+  /* border: 1px solid var(--border-color); */
+  box-shadow: 0px 0px 20px rgba(0, 0, 40, 0.1);
 }
 
 .ItemList img {
@@ -132,6 +135,7 @@ button:hover {
 .ItemInfo {
   margin: 10px;
 }
+
 .App-link {
   color: var(--main-color);
 }

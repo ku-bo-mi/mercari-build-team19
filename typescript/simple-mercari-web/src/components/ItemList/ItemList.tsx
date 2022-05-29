@@ -58,11 +58,8 @@ export const ItemList: React.FC<Prop> = (props) => {
               {/* <img src={placeholderImage} /> */}
               <img className='ItemImage' src={server + (`/image/${item.image}`)} />
               <div className='ItemInfo'>
-                <p>
-                  <span>{item.name}</span>
-                  <br />
-                  <span>{item.category}</span>
-                </p>
+                <p className='ItemName'>{item.name}</p>
+                <p className='ItemCategory'>{item.category}</p>
               </div>
             </div>
           )
