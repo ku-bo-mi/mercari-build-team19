@@ -16,7 +16,6 @@ def drop_tables():
         db_cursor = db_connect.cursor()
         sql1 = "DROP TABLE category"
         db_cursor.execute(sql1)
-
         db_connect.commit()
 
 
@@ -38,6 +37,7 @@ def create_tables():
         category_id INTEGER,
         image STRING,
         status_id INTEGER,
+        numOfViews INTEGER,
         FOREIGN KEY(category_id) REFERENCES categories(category_id),
         FOREIGN KEY (status_id) REFERENCES status(status_id)
         )"""
@@ -70,6 +70,7 @@ def get_items(status_id=None):
                 items.name,
                 categories.name as category,
                 items.image,
+                items.numOfViews,
                 status.name as status
                 FROM items 
                 INNER JOIN categories ON items.category_id =categories.category_id
@@ -98,7 +99,9 @@ def get_item_by_id(item_id, status_id=None):
         sql = """SELECT items.id,
                 items.name,
                 categories.name as category,
-                items.image
+                items.image,
+                items.numOfViews,
+                status.name as status
                 FROM items 
                 INNER JOIN categories ON items.category_id =categories.category_id
                 INNER JOIN status ON items.status_id = status.status_id
@@ -147,6 +150,7 @@ def search_items(keyword, status_id=None):
                 items.name,
                 categories.name as category,
                 items.image,
+                items.numOfViews,
                 status.name as status
                 FROM items 
                 INNER JOIN categories ON items.category_id =categories.category_id
@@ -161,3 +165,11 @@ def search_items(keyword, status_id=None):
         db_connect.commit()
 
         return {'items': r} if r else {'message': 'Item not found m(_ _)m'}
+
+
+def add_views():
+    with closing(sqlite3.connect(filename)) as db_connect:
+        db_cursor = db_connect.cursor()
+        sql = """UPDATE items SET numOfViews = numOfViews+1"""
+        db_cursor.execute(sql)
+        db_connect.commit()

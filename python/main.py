@@ -66,6 +66,7 @@ Gets the list of all items
 def read_items():
     # get the list of all items in the database
     try:
+        database.add_views()
         items = database.get_items(status_id=1)
         # format the list and return
         return items
@@ -114,6 +115,7 @@ def add_item(name: str = Form(...), category: str = Form(...), image: UploadFile
     logger.info(f"Created file: {filename_hash}")
     # add a new item in the database with the hashed filename
     try:
+        database.add_views()
         database.add_item(name, category, filename_hash, status_id=1)
         return {"message": f"item received: {name}"}
     except Error as e:
@@ -157,8 +159,9 @@ async def get_image(image_filename):
         raise HTTPException(status_code=400, detail="Image path does not end with .jpg")
 
     if not image.exists():
-        logger.debug(f"Image not found: {image}")
-        image = images / "default.jpg"
+        logger.info(f"Image not found: {image}")
+        default_image_filename = "default.jpg"
+        image = images / default_image_filename
 
     return FileResponse(image)
 
@@ -171,6 +174,7 @@ Gets the list of all requests
 def read_requests():
     # get the list of all items in the database
     try:
+        database.add_views()
         requests = database.get_items(status_id=2)
     # format the list and return
         return requests
@@ -196,6 +200,7 @@ def add_request(name: str = Form(...), category: str = Form(...), image: UploadF
 
     # add a new item in the database with the hashed filename
     try:
+        database.add_views()
         database.add_item(name, category, filename_hash, status_id=2)
         return {"message": f"item received: {name}"}
     except Error as e:
