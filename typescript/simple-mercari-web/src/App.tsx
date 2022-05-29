@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { ItemList } from './components/ItemList';
 import { Listing } from './components/Listing';
@@ -7,8 +7,36 @@ import { CreateRequestCard } from './components/CreateRequestCard';
 import { RecommendedRequests } from './components/RecommendedRequests';
 
 function App() {
-  // reload ItemList after Listing complete
+  
+  // reload components
   const [reload, setReload] = useState(true);
+
+  type formDataType = {
+    name: string,
+    category: string,
+  }
+
+  const initialItem: formDataType = {
+    name: "",
+    category: "",
+  };
+
+  // declare a state variable
+  // called when a request in the recommended requests is selected 
+  const [clickedItem, setClickedItem] = useState<formDataType>(initialItem);
+
+  const selectionHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const name: string = event.currentTarget.getAttribute('data-name') ?? "";
+    const category: string = event.currentTarget.getAttribute('data-category') ?? "";
+
+    setClickedItem({
+      name: name, category: category
+    })
+    console.info(clickedItem.name + " is selected")
+    setReload(true);
+  }
+
   return (
     <div>
       <header className='Title'>
@@ -16,12 +44,6 @@ function App() {
           <b>Mercari (demo for a buyer)</b>
         </p>
       </header>
-
-      {/* <div className='Container'>
-        <div>
-          <CreateRequest onRequestCompleted={() => setReload(true)} />
-        </div>
-      </div> */}
 
       <div className='Container'>
         <div>
@@ -42,9 +64,15 @@ function App() {
           </p>
         </div>
         <div>
-          <Listing onListingCompleted={() => setReload(true)} />
+          <Listing reload={reload} onListingCompleted={() => setReload(true)} selectedName={clickedItem.name} selectedCategory={clickedItem.category} />
         </div>
       </div>
+
+      {/* <div>
+        <button onClick={buttonHandler} name="button name">click this button</button>
+        <p>clicked button is {clickedButton}</p>
+        <p>selected item is {clickedItem.name}</p>
+      </div> */}
       
       <div className='Container'>
         <div className ='Subtitle'>
@@ -53,7 +81,7 @@ function App() {
           </p>
         </div>
         <div>
-          <RecommendedRequests reload={reload} onLoadCompleted={() => setReload(false)} />
+          <RecommendedRequests reload={reload} onLoadCompleted={() => setReload(false)} selectItem={selectionHandler} onSelectionCompleted={() => setReload(true)}/>
         </div>
       </div>
       

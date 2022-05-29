@@ -14,10 +14,12 @@ const placeholderImage = process.env.PUBLIC_URL + '/logo192.png';
 interface Prop {
   reload?: boolean;
   onLoadCompleted?: () => void;
+  selectItem?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onSelectionCompleted: () => void;
 }
 
 export const RecommendedRequests: React.FC<Prop> = (props) => {
-  const { reload = true, onLoadCompleted } = props;
+  const { reload = true, onLoadCompleted, selectItem, onSelectionCompleted } = props;
   const [requests, setRequests] = useState<Request[]>([])
   const fetchRequests = () => {
     fetch(server.concat('/requests'),
@@ -64,7 +66,7 @@ export const RecommendedRequests: React.FC<Prop> = (props) => {
                 <p className='ItemName'>{request.name}</p>
                 <p className='ItemCategory'>{request.category}</p>
                 <p className='ItemRequesters'>{request.numOfRequests} requests</p>
-              <button type='submit'>List this item</button>
+              <button onClick={selectItem} data-name={request.name} data-category={request.category} type='submit'>List this item</button>
             </div>
           </div>
         )
