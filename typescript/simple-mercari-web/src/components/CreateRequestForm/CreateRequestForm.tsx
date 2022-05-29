@@ -42,7 +42,8 @@ export const CreateRequest: React.FC<Prop> = (props) => {
     data.append('category', values.category)
     data.append('image', values.image)
 
-    fetch(server.concat('/requests'), { //TODO items -> requests
+    // POST request to the server
+    fetch(server.concat('/requests'), {
       method: 'POST',
       mode: 'cors',
       body: data,

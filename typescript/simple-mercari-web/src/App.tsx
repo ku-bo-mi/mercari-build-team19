@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { ItemList } from './components/ItemList';
 import { Listing } from './components/Listing';
-import { CreateRequest } from './components/CreateRequest';
+import { CreateRequest } from './components/CreateRequestForm';
 import { CreateRequestCard } from './components/CreateRequestCard';
 import { RecommendedRequests } from './components/RecommendedRequests';
 
