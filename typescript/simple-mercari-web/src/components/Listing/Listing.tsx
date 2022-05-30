@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const server = process.env.API_URL || 'http://127.0.0.1:9000';
 
 interface Prop {
+  reload?: boolean;
   onListingCompleted?: () => void;
+  selectedName?: string;
+  selectedCategory?: string;
 }
 
 type formDataType = {
@@ -13,13 +16,18 @@ type formDataType = {
 }
 
 export const Listing: React.FC<Prop> = (props) => {
-  const { onListingCompleted } = props;
+
+  const {reload, onListingCompleted, selectedName, selectedCategory } = props;
   const initialState = {
     name: "",
     category: "",
     image: "",
   };
   const [values, setValues] = useState<formDataType>(initialState);
+
+  useEffect(()=>{
+    console.log({selectedName})
+  })
 
   const onValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues({
@@ -32,11 +40,14 @@ export const Listing: React.FC<Prop> = (props) => {
     })
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    console.info("onSubmit called")
     event.preventDefault()
     const data = new FormData()
     data.append('name', values.name)
     data.append('category', values.category)
     data.append('image', values.image)
+    console.info(values.name)
+    console.info(values.category)
 
     fetch(server.concat('/items'), {
       method: 'POST',
@@ -52,13 +63,13 @@ export const Listing: React.FC<Prop> = (props) => {
       })
   };
   return (
-    <div className='Listing'>
+    <div className='Form'>
       <form onSubmit={onSubmit}>
         <div>
-          <input type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
-          <input type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
+          <input value={selectedName} type='text' name='name' id='name' placeholder='name' onChange={onValueChange} required />
+          <input value={selectedCategory} type='text' name='category' id='category' placeholder='category' onChange={onValueChange} />
           <input type='file' name='image' id='image' onChange={onFileChange} required />
-          <button type='submit'>Add this item</button>
+          <button type='submit'>List this item</button>
         </div>
       </form>
     </div>
