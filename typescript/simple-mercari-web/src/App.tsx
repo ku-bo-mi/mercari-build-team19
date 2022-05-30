@@ -41,7 +41,7 @@ function App() {
     <div>
       <header className='Title'>
         <p>
-          <b>Mercari (demo for a buyer)</b>
+          <b>Mercari</b>
         </p>
       </header>
 
@@ -51,33 +51,29 @@ function App() {
         </div>
       </div>
 
+      <div className='Spacer'></div>
+
       <header className='Title'>
         <p>
-          <b>Mercari (demo for a seller)</b>
+          <b>Mercari</b>
         </p>
       </header>
 
       <div className='Container'>
         <div className ='Subtitle'>
           <p>
-            <b>What do you want to sell? / 何を売りたいですか？</b>
+            <b>What do you want to sell? / 何を出品しますか？</b>
           </p>
         </div>
         <div>
           <Listing reload={reload} onListingCompleted={() => setReload(true)} selectedName={clickedItem.name} selectedCategory={clickedItem.category} />
         </div>
       </div>
-
-      {/* <div>
-        <button onClick={buttonHandler} name="button name">click this button</button>
-        <p>clicked button is {clickedButton}</p>
-        <p>selected item is {clickedItem.name}</p>
-      </div> */}
       
       <div className='Container'>
         <div className ='Subtitle'>
           <p>
-            <b>People are requesting these items</b>
+            <b>People are requesting these items / こんな商品が探されています</b>
           </p>
         </div>
         <div>

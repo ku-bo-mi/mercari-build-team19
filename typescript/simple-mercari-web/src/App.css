@@ -28,10 +28,11 @@ p {
 }
 
 .Container {
-  margin: 4vh;
+  margin: 4vh 8vh;
 }
 
 .Title {
+  margin-top: 0px;
   background-color: var(--object-background-color);
   padding: 20px;
   display: flex;
@@ -42,6 +43,9 @@ p {
   color: var(--text-main-color);
 }
 
+.Spacer {
+  height: 60px;
+}
 .Subtitle {
   margin-bottom: 20px;
   font-size: calc(12px + 1vmin);
@@ -92,6 +96,18 @@ button {
   border-radius: 4px;
   color: var(--text-white);
   background-color: var(--main-color);
+  border-style: none;
+  font-weight: bold;
+}
+
+.RequestCreated {
+  margin-top: 4px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0px;
+  padding-right: 20px;
+  border-radius: 4px;
+  color: var(--main-color);
   border-style: none;
   font-weight: bold;
 }

@@ -105,7 +105,7 @@ export const CreateRequestCard: React.FC<Prop> = (props) => {
             <div className='ItemInfo'>
               <p className='ItemName'>{defaultName}</p>
               <p className='ItemCategory'>{defaultCategory}</p>
-              <p>Request Created!</p>
+              <p className='RequestCreated'>Request Created!</p>
             </div>
           </form>
         </div>

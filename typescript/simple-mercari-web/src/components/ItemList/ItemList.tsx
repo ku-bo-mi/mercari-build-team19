@@ -66,24 +66,6 @@ export const ItemList: React.FC<Prop> = (props) => {
         })}
       </div>
     )
-  } else{
-    // const [reload, setReload] = useState(true);
-    // return (
-    //   <div>
-    //     <div>
-    //       <p>No results found</p>
-    //       <p>We could not find anything that matches your search.</p>
-    //     </div>
-    //     <div className ='Subtitle'>
-    //       <p>
-    //         <b>Create new request</b>
-    //       </p>
-    //     </div>
-    //     <div>
-    //       <CreateRequest onRequestCompleted={() => setReload(true)} />
-    //     </div>
-    //   </div>
-    // )
   }
   
 };

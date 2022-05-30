@@ -10,7 +10,6 @@ interface Prop {
 }
 
 type formDataType = {
-  selectedName1: string,
   name: string,
   category: string,
   image: string | File,
@@ -19,9 +18,7 @@ type formDataType = {
 export const Listing: React.FC<Prop> = (props) => {
 
   const {reload, onListingCompleted, selectedName, selectedCategory } = props;
-  // console.info(selectedName)
   const initialState = {
-    selectedName1: "",
     name: "",
     category: "",
     image: "",
@@ -43,11 +40,14 @@ export const Listing: React.FC<Prop> = (props) => {
     })
   };
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    console.info("onSubmit called")
     event.preventDefault()
     const data = new FormData()
     data.append('name', values.name)
     data.append('category', values.category)
     data.append('image', values.image)
+    console.info(values.name)
+    console.info(values.category)
 
     fetch(server.concat('/items'), {
       method: 'POST',
