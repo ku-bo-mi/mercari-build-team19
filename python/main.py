@@ -169,13 +169,12 @@ async def get_image(image_filename):
 Gets the list of all requests
 """
 
-
 @app.get("/requests")
 def read_requests():
     # get the list of all items in the database
     try:
         database.add_views()
-        requests = database.get_items(status_id=2)
+        requests = database.get_recommend_requests()
     # format the list and return
         return requests
     except Error as e:
